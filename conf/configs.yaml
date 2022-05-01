@@ -1,0 +1,67 @@
+datasets:
+  librispeech:
+    clean_path: /home/fablab/Downloads/librispeech/LibriSpeech/
+    other_path: /home/fablab/Downloads/librispeech/LibriSpeech/
+    n_fft: 159
+    db_path: /home/fablab/Downloads/librispeech/LibriSpeech/pkl/
+
+text_process:
+  lang: en
+
+model:
+  num_classes: -1
+  encoder_dim: 144 # encoder_dim
+  decoder_output_dim: ${model.encoder_dim}
+  hidden_state_dim: 320
+  decoder_num_layers: 1
+  input_dim: 80
+  num_heads: 4
+  num_layers: 16
+  conv_kernel_size: 31
+  feed_forward_expansion_factor: 4
+  conv_expansion_factor: 2
+  dropout: 0.1
+  half_step_residual: True
+  subsampling_factor: 4
+  freq_masks: 2
+  time_masks: 10
+  freq_width: 27
+  time_width: 0.05
+  rnn_type: lstm
+  sos_id: 1
+  eos_id: 2
+  grad_ckpt_batchsize: 4
+
+training:
+  lr: 0.00002
+  # lr: 1.3182567385564074e-07 # intial learning rate find from auto_lr_find
+  batch_size: 4
+  max_epoch: 100
+  dataloader_numworkers: 8
+
+optim:
+  betas: [0.9, 0.98]
+  weight_decay: 1e-3
+
+sched:
+  T_0: 1000
+  eta_min: 1.3182567385564074e-07
+  last_epoch: -1
+  verbose: True
+
+tb_logger:
+  save_dir: tb_logs
+  name: conformer_logs
+
+trainer:
+  max_epochs: ${training.max_epoch}
+  enable_progress_bar: True
+  accelerator: gpu
+  gpus: 1
+  detect_anomaly: True
+  accumulate_grad_batches: 16 # 8 * batch_size (4) = 32
+
+ckpt:
+  have_ckpt: True
+  ckpt_path: ../../2022-04-26/19-43-37/tb_logs/conformer_logs/version_0/checkpoints/epoch=69-step=43261.ckpt
+  train:  True
