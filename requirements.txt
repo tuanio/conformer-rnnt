@@ -5,3 +5,4 @@ pytorch-lightning
 hydra-core
 tensorboard
 PySoundFile
+torchmetrics
