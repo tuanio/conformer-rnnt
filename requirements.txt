@@ -1,9 +1,7 @@
-torch
-torchtext
-torchaudio
-pytorch-lightning
-torchmetrics
-hydra
-tensorboard
-sox
-PySoundFile
+torch==1.11.0
+torchtext==0.12.0
+torchaudio==0.11.0
+pytorch-lightning==1.6.3
+hydra-core==1.1.2
+tensorboard==2.9.0
+PySoundFile==0.9.0.post1
