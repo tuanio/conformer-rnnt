@@ -33,20 +33,20 @@ if __name__ == "__main__":
         datasets_cfg = cfg.datasets.librispeech
 
         train_set = LibriSpeechDataset(
-            data_type="train100",
+            data_type=datasets_cfg.train,
             clean_path=datasets_cfg.clean_path,
             other_path=datasets_cfg.other_path,
             db_path=datasets_cfg.db_path
         )
 
         val_set = LibriSpeechDataset(
-            data_type="dev",
+            data_type=datasets_cfg.val,
             clean_path=datasets_cfg.clean_path,
             other_path=datasets_cfg.other_path,
             db_path=datasets_cfg.db_path
         )
         test_set = LibriSpeechDataset(
-            data_type="test",
+            data_type=datasets_cfg.test,
             clean_path=datasets_cfg.clean_path,
             other_path=datasets_cfg.other_path,
             db_path=datasets_cfg.db_path

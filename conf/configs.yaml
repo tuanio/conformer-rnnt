@@ -1,9 +1,12 @@
 datasets:
   librispeech:
-    clean_path: /home/fablab/Downloads/librispeech/LibriSpeech/
+    clean_path: ../../../../input/librispeech-clean/LibriSpeech/
     other_path: /home/fablab/Downloads/librispeech/LibriSpeech/
     n_fft: 159
     db_path: /home/fablab/Downloads/librispeech/LibriSpeech/pkl/
+    train: dev
+    val: dev
+    test: test
 
 text_process:
   lang: en
@@ -33,7 +36,7 @@ model:
   grad_ckpt_batchsize: 4
 
 training:
-  lr: 0.00002
+  lr: 0.001
   # lr: 1.3182567385564074e-07 # intial learning rate find from auto_lr_find
   batch_size: 4
   max_epoch: 100
@@ -59,9 +62,9 @@ trainer:
   accelerator: gpu
   gpus: 1
   detect_anomaly: True
-  accumulate_grad_batches: 16 # 8 * batch_size (4) = 32
+  accumulate_grad_batches: 8 # 8 * batch_size (4) = 32
 
 ckpt:
-  have_ckpt: True
+  have_ckpt: False
   ckpt_path: ../../2022-04-26/19-43-37/tb_logs/conformer_logs/version_0/checkpoints/epoch=69-step=43261.ckpt
   train:  True
