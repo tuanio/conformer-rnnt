@@ -2,18 +2,23 @@ datasets:
   librispeech:
     clean_path: ../../../../input/librispeech-clean/LibriSpeech/
     other_path: /home/fablab/Downloads/librispeech/LibriSpeech/
-    n_fft: 159
+    n_fft: 400
     db_path: /home/fablab/Downloads/librispeech/LibriSpeech/pkl/
     train: dev
     val: dev
     test: test
 
+  vivos:
+    root: ../../../../input/vivos-dataset/vivos
+
+  dataset_selected: vivos
+
 text_process:
-  lang: en
+  lang: vi
 
 model:
   num_classes: -1
-  encoder_dim: 144 # encoder_dim
+  encoder_dim: 144
   decoder_output_dim: ${model.encoder_dim}
   hidden_state_dim: 320
   decoder_num_layers: 1
@@ -36,8 +41,7 @@ model:
   grad_ckpt_batchsize: 4
 
 training:
-  lr: 0.001
-  # lr: 1.3182567385564074e-07 # intial learning rate find from auto_lr_find
+  lr: 0.0001
   batch_size: 4
   max_epoch: 100
   dataloader_numworkers: 8
@@ -66,5 +70,5 @@ trainer:
 
 ckpt:
   have_ckpt: False
-  ckpt_path: ../../2022-04-26/19-43-37/tb_logs/conformer_logs/version_0/checkpoints/epoch=69-step=43261.ckpt
-  train:  True
+  ckpt_path: ""
+  train: True

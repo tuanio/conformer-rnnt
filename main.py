@@ -1,10 +1,11 @@
+import time
 from model.conformer import Conformer
-
 import os
 import logging
 import sys
 import argparse
 import torch
+
 from torch import nn
 from torch.nn import functional as F
 from torch.utils.data import DataLoader
@@ -13,8 +14,9 @@ import hydra
 from omegaconf import OmegaConf, DictConfig
 from utils import TextProcess
 from datasets.librispeech import LibriSpeechDataset
-from module import LibrispeechDataModule, ConformerModule
-import time
+from datasets.vivos import VivosDataset
+from datamodule import LibrispeechDataModule, VivosDataModule
+from modelmodule import ConformerModule
 
 if __name__ == "__main__":
 
@@ -27,45 +29,52 @@ if __name__ == "__main__":
     @hydra.main(config_path=args.cp, config_name=args.cn)
     def main(cfg: DictConfig):
 
-        text_preprocess = TextProcess(**cfg.text_process)
-        cfg.model.num_classes = len(text_preprocess.vocab)
+        text_process = TextProcess(**cfg.text_process)
+        cfg.model.num_classes = len(text_process.vocab)
 
-        datasets_cfg = cfg.datasets.librispeech
+        if cfg.datasets.dataset_selected == "vivos":
+            train_set = VivosDataset(**cfg.datasets.vivos, subset="train")
+            test_set = VivosDataset(**cfg.datasets.vivos, subset="test")
 
-        train_set = LibriSpeechDataset(
-            data_type=datasets_cfg.train,
-            clean_path=datasets_cfg.clean_path,
-            other_path=datasets_cfg.other_path,
-            db_path=datasets_cfg.db_path
-        )
+            dm = VivosDataModule(train_set, test_set, text_process, batch_size)
 
-        val_set = LibriSpeechDataset(
-            data_type=datasets_cfg.val,
-            clean_path=datasets_cfg.clean_path,
-            other_path=datasets_cfg.other_path,
-            db_path=datasets_cfg.db_path
-        )
-        test_set = LibriSpeechDataset(
-            data_type=datasets_cfg.test,
-            clean_path=datasets_cfg.clean_path,
-            other_path=datasets_cfg.other_path,
-            db_path=datasets_cfg.db_path
-        )
-        
-        dm = LibrispeechDataModule(
-            train_set=train_set,
-            val_set=val_set,
-            test_set=test_set,
-            predict_set=test_set,
-            encode_string=text_preprocess.text2int,
-            batch_size=cfg.training.batch_size,
-            dataloader_numworkers=cfg.training.dataloader_numworkers,
-        )
+        elif cfg.datasets.dataset_selected == "librispeech":
+            
+            datasets_cfg = cfg.datasets.librispeech
+
+            train_set = LibriSpeechDataset(
+                data_type=datasets_cfg.train,
+                clean_path=datasets_cfg.clean_path,
+                other_path=datasets_cfg.other_path,
+                db_path=datasets_cfg.db_path,
+            )
+
+            val_set = LibriSpeechDataset(
+                data_type=datasets_cfg.val,
+                clean_path=datasets_cfg.clean_path,
+                other_path=datasets_cfg.other_path,
+                db_path=datasets_cfg.db_path,
+            )
+
+            test_set = LibriSpeechDataset(
+                data_type=datasets_cfg.test,
+                clean_path=datasets_cfg.clean_path,
+                other_path=datasets_cfg.other_path,
+                db_path=datasets_cfg.db_path,
+            )
+
+            dm = LibrispeechDataModule(
+                train_set=train_set,
+                val_set=val_set,
+                test_set=test_set,
+                predict_set=test_set,
+                encode_string=text_process.text2int,
+                batch_size=cfg.training.batch_size,
+                dataloader_numworkers=cfg.training.dataloader_numworkers,
+            )
 
         model = ConformerModule(
-            cfg,
-            blank=text_preprocess.list_vocab.index("<pad>"),
-            text_preprocess=text_preprocess,
+            cfg, blank=text_process.list_vocab.index("<p>"), text_process=text_process,
         )
 
         tb_logger = pl.loggers.tensorboard.TensorBoardLogger(**cfg.tb_logger)
@@ -84,7 +93,7 @@ if __name__ == "__main__":
 
             trainer.save_checkpoint("conformer_rnnt.ckpt", weights_only=True)
 
-            # export 
+            # export
             try:
                 input_sample = next(iter(dm.train_dataloader()))
                 model.to_onnx("conformer_rnnt.onnx", input_sample, export_params=True)
