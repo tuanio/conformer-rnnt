@@ -3,7 +3,7 @@ import torchaudio.transforms as T
 from model.conformer import Conformer
 import pytorch_lightning as pl
 import torchmetrics
-
+from utils import TextProcess
 
 class ConformerModule(pl.LightningModule):
     def __init__(

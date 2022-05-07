@@ -22,7 +22,7 @@ model:
   decoder_output_dim: ${model.encoder_dim}
   hidden_state_dim: 320
   decoder_num_layers: 1
-  input_dim: 80
+  input_dim: 200 # n_fft // 2 + 1
   num_heads: 4
   num_layers: 16
   conv_kernel_size: 31
