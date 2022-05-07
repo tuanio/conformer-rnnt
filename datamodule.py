@@ -6,6 +6,7 @@ from model.conformer import Conformer
 import pytorch_lightning as pl
 import torchmetrics
 import sys
+from utils import TextProcess
 
 
 class LibrispeechDataModule(pl.LightningDataModule):
