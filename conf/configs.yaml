@@ -52,7 +52,7 @@ optim:
 
 sched:
   T_0: 1000
-  eta_min: 1.3182567385564074e-07
+  eta_min: 0.00001
   last_epoch: -1
   verbose: True
 
