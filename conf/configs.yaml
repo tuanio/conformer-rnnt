@@ -10,6 +10,7 @@ datasets:
 
   vivos:
     root: ../../../../input/vivos-dataset/vivos
+    n_fft: 400
 
   dataset_selected: vivos
 
