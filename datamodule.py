@@ -130,6 +130,7 @@ class VivosDataModule(pl.LightningDataModule):
         # batch, time, feature
         specs = torch.nn.utils.rnn.pad_sequence(specs, batch_first=True)
         # specs = specs.unsqueeze(1)  # batch, channel, time, feature
+        print("Specs size", specs.size())
 
         trans = [self.text_process.text2int(s) for s in trans]
         trans = torch.nn.utils.rnn.pad_sequence(trans, batch_first=True).to(
