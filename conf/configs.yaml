@@ -63,8 +63,7 @@ tb_logger:
 trainer:
   max_epochs: ${training.max_epoch}
   enable_progress_bar: True
-  accelerator: gpu
-  gpus: 1
+  accelerator: auto
   detect_anomaly: True
   accumulate_grad_batches: 8 # 8 * batch_size (4) = 32
 
