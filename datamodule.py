@@ -136,9 +136,4 @@ class VivosDataModule(pl.LightningDataModule):
             dtype=torch.int
         )
 
-        print(specs, specs.size())
-        print(input_lengths)
-        print(trans, trans.size())
-        print(target_lengths)
-
         return specs, input_lengths, trans, target_lengths
