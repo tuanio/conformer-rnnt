@@ -123,9 +123,9 @@ class VivosDataModule(pl.LightningDataModule):
         Take feature and input, transform and then padding it
         """
         specs = [i[0] for i in batch]
-        input_lengths = torch.LongTensor([i.size(0) for i in specs])
+        input_lengths = torch.IntTensor([i.size(0) for i in specs])
         trans = [i[1] for i in batch]
-        target_lengths = torch.LongTensor([len(s) for s in trans])
+        target_lengths = torch.IntTensor([len(s) for s in trans])
 
         # batch, time, feature
         specs = torch.nn.utils.rnn.pad_sequence(specs, batch_first=True)
@@ -133,7 +133,12 @@ class VivosDataModule(pl.LightningDataModule):
 
         trans = [self.text_process.text2int(s) for s in trans]
         trans = torch.nn.utils.rnn.pad_sequence(trans, batch_first=True).to(
-            dtype=torch.long
+            dtype=torch.int
         )
+
+        print(specs, specs.size())
+        print(input_lengths)
+        print(trans, trans.size())
+        print(target_lengths)
 
         return specs, input_lengths, trans, target_lengths
