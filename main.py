@@ -36,10 +36,10 @@ if __name__ == "__main__":
             train_set = VivosDataset(**cfg.datasets.vivos, subset="train")
             test_set = VivosDataset(**cfg.datasets.vivos, subset="test")
 
-            dm = VivosDataModule(train_set, test_set, text_process, batch_size)
+            dm = VivosDataModule(train_set, test_set, text_process, **cfg.datamodule.vivos)
 
         elif cfg.datasets.dataset_selected == "librispeech":
-            
+
             datasets_cfg = cfg.datasets.librispeech
 
             train_set = LibriSpeechDataset(

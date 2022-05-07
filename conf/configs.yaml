@@ -16,6 +16,10 @@ datasets:
 text_process:
   lang: vi
 
+datamodule:
+  vivos:
+    batch_size: ${training.batch_size}
+
 model:
   num_classes: -1
   encoder_dim: 144
