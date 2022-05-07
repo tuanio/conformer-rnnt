@@ -34,6 +34,7 @@ class LibrispeechDataModule(pl.LightningDataModule):
             batch_size=self.batch_size,
             collate_fn=self._collate_fn,
             num_workers=self.num_workers,
+            shuffle=True,
         )
 
     def val_dataloader(self):
@@ -57,7 +58,7 @@ class LibrispeechDataModule(pl.LightningDataModule):
             self.predict_set,
             batch_size=self.batch_size,
             collate_fn=self._collate_fn,
-            num_workers=self.num_workers,
+            num_workers=self.num_workers
         )
 
     def _collate_fn(self, batch):
