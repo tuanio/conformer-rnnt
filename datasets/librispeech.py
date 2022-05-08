@@ -58,10 +58,6 @@ class LibriSpeechDataset(torch.utils.data.Dataset):
             transform audio pack to spectrogram
         """
 
-        filename = self.db_path + fileid + ".pkl"
-
-        # else then load and write
-
         speaker_id, chapter_id, utterance_id = fileid.split("-")
 
         file_text = speaker_id + "-" + chapter_id + self.ext_txt
