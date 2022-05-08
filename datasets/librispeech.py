@@ -16,14 +16,12 @@ class LibriSpeechDataset(torch.utils.data.Dataset):
         data_type="train100",
         clean_path="../input/librispeech-clean/LibriSpeech/",
         other_path="../input/librispeech-500-hours/LibriSpeech/",
-        db_path="../db/",
         n_fft=159,
     ):
         """
             data_type \in ['train100', 'train360', 'train460', 'train960', 'dev', 'test']
         """
 
-        self.db_path = db_path
         self.spect_func = torchaudio.transforms.Spectrogram(n_fft=n_fft)
 
         self.list_url = [clean_path + "train-clean-100"]
@@ -61,17 +59,6 @@ class LibriSpeechDataset(torch.utils.data.Dataset):
         """
 
         filename = self.db_path + fileid + ".pkl"
-        if os.path.exists(filename):
-            # exists filename
-            with open(filename, "rb") as f:
-                data = pickle.load(f)
-
-            spectrogram = data.get("spectrogram")
-            input_lengths = data.get("input_lengths")
-            transcript = data.get("transcript")
-            target_lengths = data.get("target_lengths")
-
-            return spectrogram, input_lengths, transcript, target_lengths
 
         # else then load and write
 
@@ -102,16 +89,5 @@ class LibriSpeechDataset(torch.utils.data.Dataset):
 
         input_lengths = spectrogram.size(0)  # time
         target_lengths = len(transcript)
-
-        data = dict(
-            spectrogram=spectrogram,
-            input_lengths=input_lengths,
-            transcript=transcript,
-            target_lengths=target_lengths,
-        )
-
-        # not exists then write
-        with open(filename, "wb") as f:
-            pickle.dump(data, f, pickle.HIGHEST_PROTOCOL)
 
         return spectrogram, input_lengths, transcript, target_lengths

@@ -3,7 +3,6 @@ datasets:
     clean_path: ../../../../input/librispeech-clean/LibriSpeech/
     other_path: /home/fablab/Downloads/librispeech/LibriSpeech/
     n_fft: 400
-    db_path: /home/fablab/Downloads/librispeech/LibriSpeech/pkl/
     train: dev
     val: dev
     test: test
