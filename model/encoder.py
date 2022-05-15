@@ -121,28 +121,24 @@ class ConformerEncoder(nn.Module):
         self.input_projection = nn.Sequential(
             nn.Linear(encoder_dim, encoder_dim), nn.Dropout(p=dropout)
         )
-        self.layers = nn.ModuleList(
-            [
-                ConformerBlock(
-                    encoder_dim=encoder_dim,
-                    num_attention_heads=num_heads,
-                    feed_forward_expansion_factor=feed_forward_expansion_factor,
-                    conv_expansion_factor=conv_expansion_factor,
-                    feed_forward_dropout_p=dropout,
-                    attention_dropout_p=dropout,
-                    conv_dropout_p=dropout,
-                    conv_kernel_size=conv_kernel_size,
-                    half_step_residual=half_step_residual,
-                )
-                for _ in range(num_layers)
-            ]
-        )
+        module_list = [
+            ConformerBlock(
+                encoder_dim=encoder_dim,
+                num_attention_heads=num_heads,
+                feed_forward_expansion_factor=feed_forward_expansion_factor,
+                conv_expansion_factor=conv_expansion_factor,
+                feed_forward_dropout_p=dropout,
+                attention_dropout_p=dropout,
+                conv_dropout_p=dropout,
+                conv_kernel_size=conv_kernel_size,
+                half_step_residual=half_step_residual,
+            )
+            for _ in range(num_layers)
+        ]
+        self.layers = nn.Sequential(*module_list)
 
     def forward(self, x, lengths):
         x, lengths = self.conv_subsampling(x, lengths)
         x = self.input_projection(x)
-
-        for layer in self.layers:
-            x = layer(x)
-
+        x = self.layers(x)
         return x, lengths

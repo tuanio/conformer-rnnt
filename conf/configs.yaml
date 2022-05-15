@@ -55,10 +55,9 @@ optim:
   weight_decay: 1e-3
 
 sched:
-  T_0: 1000
-  eta_min: 0.00001
-  last_epoch: -1
-  verbose: True
+  init_lr: 1e-10
+  d_model: ${model.encoder_dim}
+  n_warmup_steps: 4000
 
 tb_logger:
   save_dir: tb_logs

@@ -1,9 +1,11 @@
 import torch
 import torchaudio.transforms as T
 from model.conformer import Conformer
+from scheduler import TransformerLRScheduler
 import pytorch_lightning as pl
 import torchmetrics
 from utils import TextProcess
+
 
 class ConformerModule(pl.LightningModule):
     def __init__(
@@ -23,9 +25,7 @@ class ConformerModule(pl.LightningModule):
 
     def configure_optimizers(self):
         optimizer = torch.optim.AdamW(self.parameters(), lr=self.lr, **self.cfg.optim)
-        lr_scheduler = torch.optim.lr_scheduler.CosineAnnealingWarmRestarts(
-            optimizer, **self.cfg.sched
-        )
+        lr_scheduler = TransformerLRScheduler(optimizer, **self.cfg.sched)
         return [optimizer], [lr_scheduler]
 
     def get_batch(self, batch):

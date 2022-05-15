@@ -128,24 +128,6 @@ class Conformer(nn.Module):
         Returns:
             * predictions (torch.FloatTensor): Result of model predictions.
         """
-        batchsize = inputs.size(0)
-
-        # # decoder with checkpoint
-        # list_encoder_outputs = []
-        # list_encoder_output_lengths = []
-        # for idx in range(0, batchsize, self.grad_ckpt_batchsize):
-        #     batch_inputs = inputs[idx : idx + self.grad_ckpt_batchsize]
-        #     batch_input_lengths = input_lengths[idx : idx + self.grad_ckpt_batchsize]
-
-        #     encoder_outputs, encoder_output_lengths = checkpoint(
-        #         self.encoder, batch_inputs, batch_input_lengths
-        #     )
-
-        #     list_encoder_outputs.append(encoder_outputs)
-        #     list_encoder_output_lengths.append(encoder_output_lengths)
-        # encoder_outputs = torch.cat(list_encoder_outputs, dim=0)
-        # encoder_output_lengths = torch.cat(list_encoder_output_lengths, dim=0)
-
         encoder_outputs, encoder_output_lengths = self.encoder(inputs, input_lengths)
         decoder_outputs, _ = self.decoder(targets, target_lengths)
 
