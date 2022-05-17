@@ -9,7 +9,7 @@ datasets:
 
   vivos:
     root: ../../../../input/vivos-dataset/vivos
-    n_fft: 400
+    n_fft: 159
 
   dataset_selected: vivos
 
@@ -45,7 +45,7 @@ model:
   grad_ckpt_batchsize: 4
 
 training:
-  lr: 0.0001
+  lr: 0.001
   batch_size: 4
   max_epoch: 100
   dataloader_numworkers: 8
@@ -55,9 +55,8 @@ optim:
   weight_decay: 1e-3
 
 sched:
-  init_lr: 1e-10
-  d_model: ${model.encoder_dim}
-  n_warmup_steps: 4000
+  num_warmup_steps: 4000
+  num_training_steps: 100000
 
 tb_logger:
   save_dir: tb_logs

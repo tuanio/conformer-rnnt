@@ -5,6 +5,7 @@ from scheduler import TransformerLRScheduler
 import pytorch_lightning as pl
 import torchmetrics
 from utils import TextProcess
+from transformers import get_linear_schedule_with_warmup
 
 
 class ConformerModule(pl.LightningModule):
@@ -25,7 +26,7 @@ class ConformerModule(pl.LightningModule):
 
     def configure_optimizers(self):
         optimizer = torch.optim.AdamW(self.parameters(), lr=self.lr, **self.cfg.optim)
-        lr_scheduler = TransformerLRScheduler(optimizer, **self.cfg.sched)
+        lr_scheduler = get_linear_schedule_with_warmup(optimizer, **self.cfg.sched)
         return [optimizer], [lr_scheduler]
 
     def get_batch(self, batch):
