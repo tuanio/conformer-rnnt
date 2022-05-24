@@ -94,7 +94,8 @@ class ConformerModule(pl.LightningModule):
         )
         wer = torch.mean(list_wer)
 
-        self.log_output(predicts[0], targets[0], wer)
+        if batch_idx % 100 == 0:
+            self.log_output(predicts[0], targets[0], wer)
 
         self.log("val_loss", loss)
         self.log("val_batch_wer", wer)
@@ -126,7 +127,8 @@ class ConformerModule(pl.LightningModule):
         )
         wer = torch.mean(list_wer)
 
-        self.log_output(predicts[0], targets[0], wer)
+        if batch_idx % 100 == 0:
+            self.log_output(predicts[0], targets[0], wer)
 
         self.log("test_loss", loss)
         self.log("test_batch_wer", wer)
