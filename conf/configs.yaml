@@ -48,7 +48,7 @@ training:
   lr: 0.001
   batch_size: 4
   max_epoch: 100
-  dataloader_numworkers: 8
+  num_workers: 8
 
 optim:
   betas: [0.9, 0.98]

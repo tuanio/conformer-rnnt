@@ -18,7 +18,7 @@ class LibrispeechDataModule(pl.LightningDataModule):
         predict_set,
         encode_string,
         batch_size: int = 32,
-        dataloader_numworkers: int = 4,
+        num_workers: int = 4,
     ):
         super().__init__()
         self.train_set = train_set
@@ -27,7 +27,7 @@ class LibrispeechDataModule(pl.LightningDataModule):
         self.predict_set = predict_set
         self.batch_size = batch_size
         self.encode_string = encode_string
-        self.num_workers = dataloader_numworkers
+        self.num_workers = num_workers
 
     def train_dataloader(self):
         return DataLoader(
@@ -35,6 +35,7 @@ class LibrispeechDataModule(pl.LightningDataModule):
             batch_size=self.batch_size,
             collate_fn=self._collate_fn,
             num_workers=self.num_workers,
+            pin_memory=True,
             shuffle=True,
         )
 
@@ -44,6 +45,7 @@ class LibrispeechDataModule(pl.LightningDataModule):
             batch_size=self.batch_size,
             collate_fn=self._collate_fn,
             num_workers=self.num_workers,
+            pin_memory=True,
         )
 
     def test_dataloader(self):
@@ -51,6 +53,7 @@ class LibrispeechDataModule(pl.LightningDataModule):
             self.test_set,
             batch_size=self.batch_size,
             collate_fn=self._collate_fn,
+            pin_memory=True,
             num_workers=self.num_workers,
         )
 
@@ -60,6 +63,7 @@ class LibrispeechDataModule(pl.LightningDataModule):
             batch_size=self.batch_size,
             collate_fn=self._collate_fn,
             num_workers=self.num_workers,
+            pin_memory=True,
         )
 
     def _collate_fn(self, batch):
@@ -83,6 +87,7 @@ class VivosDataModule(pl.LightningDataModule):
         testset: Dataset,
         text_process: TextProcess,
         batch_size: int,
+        num_workers: int = 8,
     ):
         super().__init__()
 
@@ -90,6 +95,7 @@ class VivosDataModule(pl.LightningDataModule):
         self.valset = testset
         self.testset = testset
         self.batch_size = batch_size
+        self.num_workers = num_workers
 
         self.text_process = text_process
 
@@ -100,6 +106,7 @@ class VivosDataModule(pl.LightningDataModule):
             collate_fn=self._collate_fn,
             shuffle=True,
             pin_memory=True,
+            num_workers=self.num_workers
         )
 
     def val_dataloader(self):
@@ -108,6 +115,7 @@ class VivosDataModule(pl.LightningDataModule):
             batch_size=self.batch_size,
             collate_fn=self._collate_fn,
             pin_memory=True,
+            num_workers=self.num_workers
         )
 
     def test_dataloader(self):
@@ -116,6 +124,7 @@ class VivosDataModule(pl.LightningDataModule):
             batch_size=self.batch_size,
             collate_fn=self._collate_fn,
             pin_memory=True,
+            num_workers=self.num_workers
         )
 
     def _collate_fn(self, batch):
