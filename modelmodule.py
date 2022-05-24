@@ -9,7 +9,7 @@ from transformers import get_linear_schedule_with_warmup
 
 class ConformerModule(pl.LightningModule):
     def __init__(
-        self, cfg, blank: int = 0, text_process: TextPrgocess = None, batch_size: int = 4
+        self, cfg, blank: int = 0, text_process: TextProcess = None, batch_size: int = 4
     ):
         super().__init__()
         self.cfg = cfg
