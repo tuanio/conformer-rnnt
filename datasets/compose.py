@@ -54,7 +54,7 @@ class ComposeDataset(Dataset):
         return walker
 
     def init_vlsp(self, root):
-        walker = list(Path(waves_path).glob("*.wav"))
+        walker = list(Path(root).glob("*.wav"))
 
         def load_el_from_path(filepath):
             filename = filepath.name.split(".")[0] + ".txt"
