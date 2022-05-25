@@ -62,7 +62,7 @@ class ComposeDataset(Dataset):
             filename = filepath.name.split(".")[0] + ".txt"
             with open(Path(root) / filename, "r", encoding="utf-8") as f:
                 trans = f.read().strip().lower()
-                trans.replace("<unk>", "").strip()
+                trans = trans.replace("<unk>", "").strip()
             return filepath, trans
 
         walker = [load_el_from_path(filepath) for filepath in walker]
