@@ -15,6 +15,7 @@ from omegaconf import OmegaConf, DictConfig
 from utils import TextProcess
 from datasets.librispeech import LibriSpeechDataset
 from datasets.vivos import VivosDataset
+from datasets.compose import ComposeDataset
 from datamodule import LibrispeechDataModule, VivosDataModule
 from modelmodule import ConformerModule
 
@@ -39,7 +40,13 @@ if __name__ == "__main__":
             dm = VivosDataModule(
                 train_set, test_set, text_process, **cfg.datamodule.vivos
             )
+        elif cfg.datasets.dataset_selected == "compose":
+            train_set = ComposeDataset(**cfg.datasets.compose, vivos_subset="train")
+            test_set = ComposeDataset(**cfg.datasets.compose, vivos_subset="test")
 
+            dm = VivosDataModule(
+                train_set, test_set, text_process, **cfg.datamodule.vivos
+            )
         elif cfg.datasets.dataset_selected == "librispeech":
 
             datasets_cfg = cfg.datasets.librispeech
@@ -71,8 +78,7 @@ if __name__ == "__main__":
                 test_set=test_set,
                 predict_set=test_set,
                 encode_string=text_process.text2int,
-                batch_size=cfg.training.batch_size,
-                dataloader_numworkers=cfg.training.dataloader_numworkers,
+                **cfg.datamodule.librispeech
             )
 
         model = ConformerModule(

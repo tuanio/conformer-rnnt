@@ -9,9 +9,14 @@ datasets:
 
   vivos:
     root: ../../../../input/vivos-dataset/vivos
-    n_fft: 159
+    n_fft: 400
 
-  dataset_selected: vivos
+  compose:
+    vivos_root: ...
+    vlsp_root: ...
+    n_fft: 400
+
+  dataset_selected: compose
 
 text_process:
   lang: vi
@@ -19,6 +24,11 @@ text_process:
 datamodule:
   vivos:
     batch_size: ${training.batch_size}
+    num_workers: 8
+
+  librispeech:
+    batch_size: ${training.batch_size}
+    num_workers: 8
 
 model:
   num_classes: -1
@@ -48,7 +58,6 @@ training:
   lr: 0.001
   batch_size: 4
   max_epoch: 100
-  num_workers: 8
 
 optim:
   betas: [0.9, 0.98]
