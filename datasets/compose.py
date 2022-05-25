@@ -26,7 +26,9 @@ class ComposeDataset(Dataset):
         self.feature_transform = torchaudio.transforms.Spectrogram(n_fft=n_fft)
 
         self.walker = self.init_vivos(vivos_root, vivos_subset)
-        self.walker += self.init_vlsp(vlsp_root)
+
+        if vivos_subset == "train":
+            self.walker += self.init_vlsp(vlsp_root)
 
     def init_vivos(self, root, subset):
         assert subset in ["train", "test"], "subset not found"
