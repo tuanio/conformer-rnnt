@@ -58,7 +58,7 @@ class ComposeDataset(Dataset):
 
         def load_el_from_path(filepath):
             filename = filepath.name.split(".")[0] + ".txt"
-            with open(filename, "r", encoding="utf-8") as f:
+            with open(Path(root) / filename, "r", encoding="utf-8") as f:
                 trans = f.read().strip().lower()
             return filepath, trans
 
